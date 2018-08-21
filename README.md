@@ -1,8 +1,4 @@
-## Writeup
-
----
-
-**Advanced Lane Finding Project**
+## Advanced Image Processing on Lane Detection
 
 The goals / steps of this project are the following:
 
@@ -27,19 +23,7 @@ The goals / steps of this project are the following:
 [Image8]: ./output_images/lane_finding_tracking.png "Lane Tracking"
 [Image9]: ./output_images/overlay.png "Overlay"
 
-## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
-
-### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
-
----
-
-### Writeup / README
-
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.   
-
 ### Camera Calibration
-
-#### 1. Briefly state how you computed the camera matrix and distortion coefficients. Provide an example of a distortion corrected calibration image.
 
 The code for this step is in the file called `camera_calibration.py`.  
 
@@ -51,7 +35,7 @@ I then used the output `objpoints` and `imgpoints` to compute the camera calibra
 
 ### Pipeline (single images)
 
-#### 1. Provide an example of a distortion-corrected image.
+#### 1. A distortion-corrected image.
 
 To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
 ![alt text][image2]
@@ -62,13 +46,13 @@ The above image is the raw image. By drawing a straight line along with the road
 
 The image above is distortion-corrected image from the same raw image. This time, we can see the road lane perpeftly matches the straight line I drew, which means the distortion coefficients are good enough to remove the image distortion caused by the camera lens.
 
-#### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
+#### 2. Use color transforms, gradients or other methods to create a thresholded binary image.
 
 I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines 5 through 16, 42 through 48 and 57 through 57 in `image_processing.py`).  Here's an example of my output for this step.  
 
 ![alt text][image4]
 
-#### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
+#### 3. Perform a perspective transform and provide an example of a transformed image.
 
 The code for my perspective transform includes a function called `perspective_transfrom()`, which appears in lines 69 through 77 in the file `image_processing.py`.  The `perspective_transfrom()` function takes as inputs an image (`img`), as well as source (`src_points`) and destination (`dst_points`) points.  I chose the hardcode the source and destination points in the following manner:
 
@@ -103,7 +87,7 @@ I verified that my perspective transform was working as expected by drawing the 
 
 ![alt text][image6]
 
-#### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
+#### 4. Identify lane-line pixels and fit their positions with a polynomial.
 
 I did this in the class Line() in `line.py`
 
@@ -117,7 +101,7 @@ The above image shows the blind search method. I seached all the nonzero points 
 
 The above image shows the tracking lanes seaching. If the lanes are detected in the last frame, I do not need to do the blind search again for saving both computation power as well as time. Based to the previous points' coordinated, I searched all of the nonzero points within a margin and collect them. Using the same fitting method I will be able to obtain the polynomial coefficients and draw the fit lanes with red color showed above.
 
-#### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
+#### 5. Calculate the radius of curvature of the lane and the position of the vehicle with respect to center.
 
 I did this in the class Line() in `line.py`
 
@@ -125,7 +109,7 @@ For getting the curvatue, the code is from line 203 through 214. I first transfo
 
 For getting the car position, the code is from line 195 through 200. Using the coefficients from the fit lane polynomial in pixel unit, I am able to get the bottom x position of the two lanes in the image. The mid point of those two points will be the road lane center. Also we know the image center is the vehicle's position so I am able to compute the offset. By multiplying the pixel to meter ratio I will be able to know how much the car is off the road center, either left or right.	
 
-#### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
+#### 6. Result.
 
 I implemented this step in lines 54 through 57 in my code in `mainm.py` and in the function `get_warpback_overlay_img()` in lines 80 through 103 in and lines from 106 through 128 for `add_img_info()` in code `image_processing.py`.  Here is an example of my result on a test image:
 
@@ -133,16 +117,6 @@ I implemented this step in lines 54 through 57 in my code in `mainm.py` and in t
 
 ---
 
-### Pipeline (video)
-
-#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+### Video
 
 Here's a [link to my video result](https://youtu.be/rT0CF0HcxlU)
-
----
-
-### Discussion
-
-#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
-
-For the peoject video, everything worked fine. But when I tried the challenging video, it does not work well enough. I took a look at the intermediate processing images and I found it was because of the thresholding for generating the binary image. For those two videos, the lightness is brighter so that more noise comes or the road is not clean enough so the noisy lines on the road might affect. One potential method to fix that is by implementing a queue in Line() class which stores several consequtive detected results and only when the detection is bad for several frames I redo the blind searching. The reason is by searching based on the prevous result will remove the noise that is further than the lane I detected already. However, this will requre more changes in the sanity check function, which needs to have more tolorance but may not lose the balance. Also by implementing the moving average, the results will be smoother. I will keep optimizing this projects as the same time while I am moving on to the next session.s
