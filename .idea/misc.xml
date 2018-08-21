@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+<<<<<<< HEAD
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.5.3 (D:\ANACONDA\envs\tensorflow2\python.exe)" project-jdk-type="Python SDK" />
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.5 (udacity) (3)" project-jdk-type="Python SDK" />
+  <component name="TerminalProjectOptionsProvider">
+    <option name="myStartingDirectory" value="$PROJECT_DIR$/../../Udacity_Deep_Learning/course_projects/neural_network" />
+  </component>
+>>>>>>> f268110931352525be3f1c5d260039c307a1e3ba
+</project>
